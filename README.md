@@ -1,6 +1,6 @@
-## Next.js App Router Course - Starter
+## secured sandy - Starter
 
-This is the starter template for the Next.js App Router Course. It contains the starting code for the dashboard application.
+Q&A SaaS application to chat with your own document and quickly ask questions in a protected context.
 
-For more information, see the [course curriculum](https://nextjs.org/learn) on the Next.js Website.
-# secured sandy
+## Examples of documents
+insurance policies, staff policies and rules, core lesson plans, educational content, etc.

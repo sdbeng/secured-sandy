@@ -66,10 +66,10 @@ export async function fetchCardData() {
       invoiceStatusPromise,
     ]);
 
-    const numberOfInvoices = Number(data[0].rows[0].count ?? '0');
-    const numberOfCustomers = Number(data[1].rows[0].count ?? '0');
-    const totalPaidInvoices = formatCurrency(data[2].rows[0].paid ?? '0');
-    const totalPendingInvoices = formatCurrency(data[2].rows[0].pending ?? '0');
+    const numberOfInvoices = Number(data[0].rows[0].count ?? '0');// it returns the number of invoices in the database or 0 if there are no invoices
+    const numberOfCustomers = Number(data[1].rows[0].count ?? '0');//number of customers in the database or 0 if there are no customers
+    const totalPaidInvoices = formatCurrency(data[2].rows[0].paid ?? '0');//total amount of paid invoices or 0 if there are no paid invoices
+    const totalPendingInvoices = formatCurrency(data[2].rows[0].pending ?? '0');//returns total amount of pending invoices or 0 if there are no pending invoices
 
     return {
       numberOfCustomers,

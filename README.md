@@ -1,4 +1,4 @@
-## secured sandy - Starter
+## secured sandy - SaaS Project
 
 Q&A SaaS application to chat with your own document and quickly ask questions in a protected context.
 

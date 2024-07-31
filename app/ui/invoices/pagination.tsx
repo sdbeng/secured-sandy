@@ -19,7 +19,7 @@ export default function Pagination({ totalPages }: { totalPages: number }) {
     
   // NOTE: Uncomment this code in Chapter 11
 
-  // const allPages = generatePagination(currentPage, totalPages);
+  const allPages = generatePagination(currentPage, totalPages);
 
   return (
     <>

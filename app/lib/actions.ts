@@ -18,6 +18,8 @@ const FormSchema = z.object({
 
 const CreateInvoice = FormSchema.omit({id: true, date: true});//omit the id and date fields from the schema
 
+const UpdateInvoice = FormSchema.omit({date: true});//whatch out it starts with capital U!!
+
 export async function createInvoice(formData: FormData) {
     const {customerId, amount, status} = CreateInvoice.parse({
         customerId: formData.get('customerId'),
@@ -40,4 +42,20 @@ export async function createInvoice(formData: FormData) {
     revalidatePath('/dashboard/invoices');//clear the cache for the invoices route, once the database has been updated, the /dashboard/invoices path will be revalidated, and fresh data will be fetched from the server!!
 
     redirect('/dashboard/invoices');//redirect the user back to the invoices route after the invoice has been created
+}
+
+export async function updateInvoice(id: string, formData: FormData) {
+    const {customerId, amount, status} = UpdateInvoice.parse({
+        customerId: formData.get('customerId'),
+        amount: formData.get('amount'),
+        status: formData.get('status'),
+    });
+    const amountInCents =  amount * 100;
+
+    await sql`UPDATE invoices SET customer_id = ${customerId}, amount = ${amountInCents}, status = ${status} WHERE id = ${id}`;
+
+    revalidatePath('/dashboard/invoices');
+
+    redirect('/dashboard/invoices');
+
 }

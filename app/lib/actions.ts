@@ -78,6 +78,8 @@ export async function updateInvoice(id: string, formData: FormData) {
 }
 
 export async function deleteInvoice(id: string) {
+    //throw new Error('Failed to delete invoice');//throw an error to temporarily test the error handling in the deleteInvoice function
+
     try {
         await sql`DELETE FROM invoices WHERE id = ${id}`;        
         revalidatePath('/dashboard/invoices');
@@ -88,3 +90,5 @@ export async function deleteInvoice(id: string) {
         }        
     }
 }
+
+/* Note how redirect is being called outside of the try/catch block. This is because redirect works by throwing an error, which would be caught by the catch block. To avoid this, you can call redirect after try/catch. redirect would only be reachable if try is successful.*/

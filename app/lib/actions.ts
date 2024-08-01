@@ -61,7 +61,15 @@ export async function updateInvoice(id: string, formData: FormData) {
     });
     const amountInCents =  amount * 100;
 
-    await sql`UPDATE invoices SET customer_id = ${customerId}, amount = ${amountInCents}, status = ${status} WHERE id = ${id}`;
+    try{
+        await sql`UPDATE invoices SET customer_id = ${customerId}, amount = ${amountInCents}, status = ${status} WHERE id = ${id}`;
+
+    }catch (error) {
+        // console.error('Error updating invoice:', error);
+        return {
+            message: 'Database error: Failed to update invoice.',
+        }
+    }
 
     revalidatePath('/dashboard/invoices');
 

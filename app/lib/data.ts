@@ -152,11 +152,12 @@ export async function fetchInvoiceById(id: string) {
       WHERE invoices.id = ${id};
     `;
 
-    const invoice = data.rows.map((invoice) => ({
+    const invoice = data.rows.map((invoice) => ({//map over the data to format the amount field, converting it from cents to dollars
       ...invoice,
       // Convert amount from cents to dollars
       amount: invoice.amount / 100,
     }));
+    // console.log('invoice:', invoice);
 
     return invoice[0];
   } catch (error) {

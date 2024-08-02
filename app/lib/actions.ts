@@ -6,13 +6,17 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 //define a schema that matches the shape of the form object. This schema will
-//validate the formData object before saving it to the database.
+//use Zod to validate the formData object before saving it to the database.
 
 const FormSchema = z.object({
     id: z.string(),
-    customerId: z.string(),
-    amount: z.coerce.number(),//coerce from a string to a number while validating its type
-    status: z.enum(['pending', 'paid']),
+    customerId: z.string({
+        invalid_type_error: 'Please select a customer.',
+    }),
+    amount: z.coerce.number().gt(0, {message: 'Please enter an amount grater than $0.'}),//coerce from a string to a number while validating its type, and always want an amount > 0
+    status: z.enum(['pending', 'paid'], {
+        invalid_type_error: 'Please select an invoice status.',
+    }),
     date: z.string(),
 });
 
@@ -20,12 +24,34 @@ const CreateInvoice = FormSchema.omit({id: true, date: true});//omit the id and 
 
 const UpdateInvoice = FormSchema.omit({date: true});//whatch out it starts with capital U!!
 
-export async function createInvoice(formData: FormData) {
-    const {customerId, amount, status} = CreateInvoice.parse({
+export type State = {
+    errors?: {
+        customerId?: string[];
+        amount?: string[];
+        status?: string[];
+    }
+    message?: string | null;
+}
+
+export async function createInvoice(prevState: State, formData: FormData) {
+    //validate fields using Zod schema
+    const validatedFields = CreateInvoice.safeParse({
         customerId: formData.get('customerId'),
         amount: formData.get('amount'),
         status: formData.get('status'),
     });
+
+    //if form validation fails, return errors early. Otherwise, continue
+    if (!validatedFields.success) {
+        return {
+            errors: validatedFields.error.flatten().fieldErrors,
+            message: 'Missing fields. Failed to create invoice.',
+        };
+    }
+
+    // Prepare data for insertion into the database
+    const {customerId, amount, status} = validatedFields.data;
+
     //it's a good practice to store monetary values in cents in your database to eliminate floating point errors and ensure greater accuracy.
     const amountInCents =  amount * 100;//basic conversion to cents
     // const amountInCents = Math.round(amount * 100);//alt:converted and rounded to nearest cent
@@ -41,8 +67,7 @@ export async function createInvoice(formData: FormData) {
         console.error('Error creating invoice:', error);
         return {
             message: 'Database error: Failed to create invoice.',
-        }
-        // throw error;
+        }        
     }
     // const result = await sql`INSERT INTO invoices (customer_id, amount, status, date) VALUES (${customerId}, ${amountInCents}, ${status}, ${date}) RETURNING *`;//alt:use the RETURNING clause to return the newly created invoice
 

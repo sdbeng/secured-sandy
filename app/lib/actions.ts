@@ -4,6 +4,8 @@ import {z} from 'zod';
 import { sql } from '@vercel/postgres';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+import { signIn } from '@/auth';
+import { AuthError } from 'next-auth';
 
 //define a schema that matches the shape of the form object. This schema will
 //use Zod to validate the formData object before saving it to the database.
@@ -128,3 +130,22 @@ export async function deleteInvoice(id: string) {
 }
 
 /* Note how redirect is being called outside of the try/catch block. This is because redirect works by throwing an error, which would be caught by the catch block. To avoid this, you can call redirect after try/catch. redirect would only be reachable if try is successful.*/
+
+//connect the auth logic with your login form. In your actions.ts file, create a new action called authenticate. This action should import the signIn function from auth.ts
+
+export async function authenticate(prevState: string | undefined, formData: FormData) {
+    try {
+        await signIn('credentials', FormData);
+    } catch (error) {
+        if(error instanceof AuthError) {
+            
+            switch (error.type) {
+                case 'CredentialsSignin': 
+                    return 'Invalid credentials';
+                default:
+                    return 'Something went wrong';
+            }
+        }
+        throw error;
+    }
+}

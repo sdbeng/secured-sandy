@@ -26,13 +26,13 @@ export const generateYAxis = (revenue: Revenue[]) => {
   // based on highest record and in 1000s
   const yAxisLabels = [];
   const highestRecord = Math.max(...revenue.map((month) => month.revenue));//it returns the highest revenue in the array of revenue
-  const topLabel = Math.ceil(highestRecord / 1000) * 1000;
+  const topLabel = Math.ceil(highestRecord / 1000) * 1000;//round up to the nearest thousand
 
   for (let i = topLabel; i >= 0; i -= 1000) {
-    yAxisLabels.push(`$${i / 1000}K`);
+    yAxisLabels.push(`$${i / 1000}K`);//push the labels to the yAxisLabels array, dividing by 1000 to convert to thousands
   }
 
-  return { yAxisLabels, topLabel };
+  return { yAxisLabels, topLabel };// e.g. { yAxisLabels: ['$100K', '$200K', '$300K', '$400K', '$500K'], topLabel: 500000 }
 };
 
 export const generatePagination = (currentPage: number, totalPages: number) => {

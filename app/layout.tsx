@@ -5,7 +5,7 @@ import { Metadata } from 'next';
 export const metadata: Metadata = {
     title: 'C Ai Dashboard',
     description: 'Concord Ai tech hub Dashboard',
-    metadataBase: new URL('https://next-auth.js.org'),
+    metadataBase: new URL('https://secured-sandy.vercel.app/'),
 }
 
 export default function RootLayout({

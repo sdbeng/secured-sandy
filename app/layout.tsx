@@ -1,5 +1,12 @@
 import '@/app/ui/global.css'
 import { inter } from '@/app/ui/fonts';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'C Ai Dashboard',
+    description: 'Concord Ai tech hub Dashboard',
+    metadataBase: new URL('https://secured-sandy.vercel.app/'),
+}
 
 export default function RootLayout({
   children,

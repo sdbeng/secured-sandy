@@ -1,4 +1,5 @@
 import NextAuth from "next-auth";
+import GitHub from "next-auth/providers/github";
 import { authConfig } from "./auth.config";
 import Credentials  from "next-auth/providers/credentials";
 import { z } from "zod";
@@ -18,18 +19,19 @@ import bcrypt from 'bcrypt';
 //create a getUser function to fetch/queries the user from the database
 async function getUser(email: string): Promise<User | undefined> {
     try {
-        const user = await sql<User>`SELECT * FROM users WHERE email = ${email}`;
+        const user = await sql<User>`SELECT * FROM users WHERE email=${email}`;
         return user.rows[0];
         
     } catch (error) {
-        console.log('Failed to fetch user:', error);
-        throw new Error('Failed to fetch user');
+        console.error('Failed to fetch user:', error);
+        throw new Error('Failed to fetch user.');
     }
 }
 
-export const {auth, signIn, signOut } = NextAuth({
+export const {handlers, auth, signIn, signOut } = NextAuth({
     ...authConfig,
     providers: [
+        GitHub,
         Credentials({
         async authorize(credentials) {
             const parsedCredentials = z.object({ email: z.string().email(), password: z.string().min(6)})

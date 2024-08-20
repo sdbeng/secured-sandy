@@ -133,14 +133,12 @@ export async function deleteInvoice(id: string) {
 
 //connect the auth logic with your login form. In your actions.ts file, create a new action called authenticate. This action should import the signIn function from auth.ts
 
-export async function authenticate(prevState: string | undefined, formData: FormData) {
-    console.log('prevState:', prevState);
-    console.log('formData===', formData)
-    try {
-        console.log('in try block...');
+export async function authenticate(
+    prevState: string | undefined, formData: FormData
+) {
+    try {        
         await signIn('credentials', formData);
     } catch (error) {
-        console.log('in catch block...');
         if(error instanceof AuthError) { 
             console.log('error:', error);           
             switch (error.type) {

@@ -3,7 +3,6 @@ import { CalendarIcon } from '@heroicons/react/24/outline';
 import { lusitana } from '@/app/ui/fonts';
 import { Revenue } from '@/app/lib/definitions';
 import { fetchRevenue } from '@/app/lib/data';
-import { log } from 'console';
 
 // This component is representational only.
 // For data visualization UI, check out:
@@ -13,7 +12,6 @@ import { log } from 'console';
 
 export default async function RevenueChart() {
   const revenue = await fetchRevenue();
-  log('revenue===', revenue);
   const chartHeight = 350;
   const { yAxisLabels, topLabel } = generateYAxis(revenue);
 
